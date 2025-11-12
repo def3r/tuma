@@ -5,6 +5,7 @@
 #include "utils.h"
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,6 +28,8 @@ int main() {
   InitWindow(ui.w, ui.h, "tuma");
   SetTargetFPS(60);
 
+  // info panel
+
   bool run = false;
   int noop = 30;
   while (!WindowShouldClose()) {
@@ -46,15 +49,21 @@ int main() {
     BeginDrawing();
       ClearBackground(BGCOLOR);
 
+      if (run)
+        DrawText("Runnin >>", 30, 30, 20, GREEN);
+
       DrawPrefixTape(&ui, tm);
       DrawTape(&ui, tm);
       DrawSuffixTape(&ui, tm);
+      DrawInfo(&ui, tm);
 
       DrawRectangleLinesEx(ui.cur, 4, WHITE);
-    EndDrawing();
-    // clang-format off
 
-      // Reset Tape
+
+    EndDrawing();
+    // clang-format on
+
+    // Reset Tape
     if (IsKeyPressed(KEY_R)) {
       memcpy(tm->tape, ui.initTape, strlen(ui.initTape));
       initTuringMachineState(tm);
@@ -66,6 +75,12 @@ int main() {
       // Run
     } else if (IsKeyPressed(KEY_ENTER) && run == false) {
       run = true;
+      noop = 30;
+
+      // Pause
+    } else if (IsKeyPressed(KEY_P)) {
+      run = false;
+      noop = 30;
 
       // Quit
     } else if (IsKeyPressed(KEY_Q)) {
@@ -91,8 +106,8 @@ int main() {
 
       noop = 30;
     }
-
   }
+
   CloseWindow();
 
   // execTuringMachine(tm);

@@ -31,6 +31,7 @@ void initTuringMachineState(turingMachine *tm) {
   tm->state.curState = tm->initState;
   tm->state.dir = RIGHT;
   tm->state.halt = false;
+  tm->state.steps = 0;
 }
 
 void transition_func(turingMachine *tm) {
@@ -48,6 +49,7 @@ void transition_func(turingMachine *tm) {
   if (i != tm->transitions->len) {
     if (t->halt) {
       tm->state.halt = true;
+      return;
     }
     if (t->write != '\0') {
       *tm->state.head = t->write;
@@ -58,6 +60,7 @@ void transition_func(turingMachine *tm) {
     tm->state.curState = t->next;
   }
   tm->state.head += tm->state.dir;
+  tm->state.steps++;
 }
 
 void execTuringMachine(turingMachine *tm) {

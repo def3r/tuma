@@ -41,6 +41,7 @@ typedef struct {
 } transitionVector2;
 
 typedef struct {
+  uint32_t  steps;
   uint16_t  curState;
   enum Dir  dir;
   bool      halt;

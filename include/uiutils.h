@@ -36,4 +36,6 @@ void DrawPrefixTape(uiCtx *ctx, turingMachine *tm);
 void DrawTape(uiCtx *ctx, turingMachine *tm);
 void DrawSuffixTape(uiCtx *ctx, turingMachine *tm);
 
+void DrawInfo(uiCtx *ctx, turingMachine *tm);
+
 #endif
