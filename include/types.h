@@ -65,6 +65,7 @@ turingMachine *makeTuringMachine();
 void freeTuringMachine(turingMachine *tm);
 void initTuringMachineState(turingMachine *tm);
 void transition_func(turingMachine *tm);
-void exec(turingMachine *tm);
+void execTuringMachine(turingMachine *tm);
+void nextTuringMachine(turingMachine *tm);
 
 #endif

@@ -30,6 +30,7 @@ void initTuringMachineState(turingMachine *tm) {
   tm->state.head = tm->tape;
   tm->state.curState = tm->initState;
   tm->state.dir = RIGHT;
+  tm->state.halt = false;
 }
 
 void transition_func(turingMachine *tm) {
@@ -59,13 +60,20 @@ void transition_func(turingMachine *tm) {
   tm->state.head += tm->state.dir;
 }
 
-void exec(turingMachine *tm) {
-  initTuringMachineState(tm);
+void execTuringMachine(turingMachine *tm) {
   bool exit = false;
   while (!exit && !tm->state.halt) {
     printf("Current State: %d, head: %c, tape: %s\n", tm->state.curState,
            *tm->state.head, tm->tape);
     transition_func(tm);
     VectorFind(tm->finalStates, tm->state.curState, exit);
+  }
+}
+
+void nextTuringMachine(turingMachine *tm) {
+  if (!tm->state.halt) {
+    printf("Current State: %d, head: %c, tape: %s\n", tm->state.curState,
+           *tm->state.head, tm->tape);
+    transition_func(tm);
   }
 }
