@@ -26,8 +26,21 @@ void freeTuringMachine(turingMachine *tm) {
   Free(tm);
 }
 
+void padTuringMachineTape(turingMachine *tm) {
+  if (!tm)
+    return;
+  // lets keep padding 10 (both sides) by deafult
+  tm->rawTape = tm->tape;
+  tm->tape = malloc(21 + strlen(tm->tape));
+  sprintf(tm->tape, "BBBBBBBBBB%sBBBBBBBBBB", tm->rawTape);
+
+  tm->rawTapeLen = strlen(tm->rawTape);
+  Free(tm->rawTape);
+  tm->rawTape = tm->tape + 10;
+}
+
 void initTuringMachineState(turingMachine *tm) {
-  tm->state.head = tm->tape;
+  tm->state.head = tm->tape + 10;
   tm->state.curState = tm->initState;
   tm->state.dir = RIGHT;
   tm->state.halt = false;
@@ -66,8 +79,8 @@ void transition_func(turingMachine *tm) {
 void execTuringMachine(turingMachine *tm) {
   bool exit = false;
   while (!exit && !tm->state.halt) {
-    printf("Current State: %d, head: %c, tape: %s\n", tm->state.curState,
-           *tm->state.head, tm->tape);
+    printf("Current State: %d, head: %c, tape: %.*s\n", tm->state.curState,
+           *tm->state.head, (int)tm->rawTapeLen, tm->rawTape);
     transition_func(tm);
     VectorFind(tm->finalStates, tm->state.curState, exit);
   }
@@ -75,8 +88,8 @@ void execTuringMachine(turingMachine *tm) {
 
 void nextTuringMachine(turingMachine *tm) {
   if (!tm->state.halt) {
-    printf("Current State: %d, head: %c, tape: %s\n", tm->state.curState,
-           *tm->state.head, tm->tape);
+    printf("Current State: %d, head: %c, tape: %.*s\n", tm->state.curState,
+           *tm->state.head, (int)tm->rawTapeLen, tm->rawTape);
     transition_func(tm);
   }
 }

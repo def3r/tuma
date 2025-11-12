@@ -30,42 +30,16 @@ void initUICtx(uiCtx *ctx, turingMachine *tm) {
   ctx->dX = 0;
 }
 
-void DrawPrefixTape(uiCtx *ctx, turingMachine *tm) {
-  ctx->x = 0 - ctx->offsetX, ctx->y = ctx->h / 2 - (int)(ctx->charHeight / 2);
-  for (int i = 0; i < 6; i++) {
-    DrawCharRectangle(ctx, &tm->blankSymbol);
-  }
-}
-
 void DrawTape(uiCtx *ctx, turingMachine *tm) {
   char *tape = tm->tape;
-  ctx->x = ctx->w / 2 - (int)(ctx->charWidth / 2) - ctx->offsetX,
+  ctx->x = ctx->w / 2 - (int)(ctx->charWidth / 2) - (10 * ctx->charWidth) -
+           ctx->offsetX,
   ctx->y = ctx->h / 2 - (int)(ctx->charHeight / 2);
   while (*tape != '\0') {
     char c[2];
     c[0] = *tape, c[1] = '\0';
     DrawCharRectangle(ctx, c);
     tape++;
-  }
-}
-
-void DrawSuffixTape(uiCtx *ctx, turingMachine *tm) {
-  for (int i = 0; i < 14; i++) {
-    Rectangle r = {
-        .x = ctx->x,
-        .y = ctx->y,
-        .width = ctx->charWidth,
-        .height = ctx->charHeight,
-    };
-
-    DrawRectangleRec(r, TABDIM);
-    DrawRectangleLinesEx(r, 2, TABOUTLINE);
-
-    int textWidth = MeasureText(&tm->blankSymbol, ctx->fontSize);
-    int textHeight = ctx->fontSize;
-    DrawText(&tm->blankSymbol, ctx->x + (100 - textWidth) / 2,
-             ctx->y + (90 - textHeight) / 2, ctx->fontSize, BGCOLOR);
-    ctx->x += ctx->charWidth;
   }
 }
 
@@ -96,7 +70,7 @@ void DrawInfo(uiCtx *ctx, turingMachine *tm) {
   DrawText("State", ctx->x, ctx->y, 26, GRAY);
   DrawText(buf, ctx->x + 180, ctx->y, 26, GRAY);
 
-  sprintf(buf, "%ld", (tm->state.head - tm->tape));
+  sprintf(buf, "%ld", (tm->state.head - tm->tape - 10));
   DrawText("Head index", ctx->x, ctx->y + 30, 26, GRAY);
   DrawText(buf, ctx->x + 180, ctx->y + 30, 26, GRAY);
 

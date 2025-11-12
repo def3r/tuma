@@ -53,6 +53,8 @@ typedef struct {
   uint16_t           initState;
   char               blankSymbol;
   char              *tape;
+  char              *rawTape;
+  size_t             rawTapeLen;
   charVector        *inputSymbols;
   charVector        *tapeSymbols;
   intVector         *finalStates;
@@ -65,6 +67,7 @@ typedef struct {
 turingMachine *makeTuringMachine();
 void freeTuringMachine(turingMachine *tm);
 void initTuringMachineState(turingMachine *tm);
+void padTuringMachineTape(turingMachine *tm);
 void transition_func(turingMachine *tm);
 void execTuringMachine(turingMachine *tm);
 void nextTuringMachine(turingMachine *tm);

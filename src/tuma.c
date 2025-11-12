@@ -14,7 +14,8 @@
 
 int main() {
   turingMachine *tm = NULL;
-  parseTOML("tm.toml", &tm);
+  parseTOML("tmadd.toml", &tm);
+  padTuringMachineTape(tm);
   initTuringMachineState(tm);
 
   uiCtx ui = {0};
@@ -27,8 +28,6 @@ int main() {
 
   InitWindow(ui.w, ui.h, "tuma");
   SetTargetFPS(60);
-
-  // info panel
 
   bool run = false;
   int noop = 30;
@@ -52,14 +51,10 @@ int main() {
       if (run)
         DrawText("Runnin >>", 30, 30, 20, GREEN);
 
-      DrawPrefixTape(&ui, tm);
       DrawTape(&ui, tm);
-      DrawSuffixTape(&ui, tm);
       DrawInfo(&ui, tm);
 
       DrawRectangleLinesEx(ui.cur, 4, WHITE);
-
-
     EndDrawing();
     // clang-format on
 
@@ -111,7 +106,7 @@ int main() {
   CloseWindow();
 
   // execTuringMachine(tm);
-  printf("Output: %s\n", tm->tape);
+  printf("Output: %.*s\n", (int)tm->rawTapeLen, tm->rawTape);
 
   free(ui.initTape);
 

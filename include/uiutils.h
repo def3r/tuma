@@ -32,9 +32,7 @@ typedef struct {
 void DrawCharRectangle(uiCtx *ctx, char *s);
 
 void initUICtx(uiCtx *ctx, turingMachine *tm);
-void DrawPrefixTape(uiCtx *ctx, turingMachine *tm);
 void DrawTape(uiCtx *ctx, turingMachine *tm);
-void DrawSuffixTape(uiCtx *ctx, turingMachine *tm);
 
 void DrawInfo(uiCtx *ctx, turingMachine *tm);
 
