@@ -14,7 +14,7 @@
 
 int main() {
   turingMachine *tm = NULL;
-  parseTOML("tmadd.toml", &tm);
+  parseTOML("tmbinc.toml", &tm);
   padTuringMachineTape(tm);
   initTuringMachineState(tm);
 
@@ -80,6 +80,9 @@ int main() {
       // Quit
     } else if (IsKeyPressed(KEY_Q)) {
       break;
+
+      // Load New File
+    } else if (IsKeyPressed(KEY_O)) {
 
       // Next Step
     } else if (IsKeyPressed(KEY_SPACE) || run) {

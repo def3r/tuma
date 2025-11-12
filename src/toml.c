@@ -64,7 +64,7 @@ char *parseMacInfo(FILE *f, turingMachine **tm) {
     } else if (strcmp(key, "tape") == 0) {
       ExtractStr(val);
       if (strlen(val) > 0) {
-        (*tm)->tape = malloc(strlen(val));
+        (*tm)->tape = calloc(strlen(val) + 1, sizeof(char));
         memcpy((*tm)->tape, val, strlen(val));
       }
 

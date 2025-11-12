@@ -42,6 +42,7 @@ void coalesceWhitespace(char *line, size_t *len) {
 
 void debug(turingMachine *tm) {
   printf("Loaded data:\nTuring Machine:\n");
+  printf("Raw Tape: %.*s\n", (int)tm->rawTapeLen, tm->rawTape);
   printf("Tape: %s\n", tm->tape);
   printf("No of States: %d\n", tm->numStates);
   printf("Blank sym: %c\n", tm->blankSymbol);
