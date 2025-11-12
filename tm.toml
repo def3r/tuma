@@ -1,0 +1,89 @@
+# Turing machine to replace 111 with 101
+[turingmachine]
+numofstates = 6
+initialstate = 0              # default is 0
+finalstates = [5]
+inputsymbols = ['0', '1']
+tapesymbols = ['0', '1', 'B']
+blanksymbol = 'B'             # default is B
+tape = '11100101111'          # default is empty string
+
+# DIR
+# LEFT=-1, NOMOVE=0, RIGHT=1, SAME (as prev)
+
+# 0 based indexing
+
+# State 0
+[[transition]]
+dir = 'RIGHT'
+cur = 0
+head = 1
+next = 1
+
+[[transition]]
+dir = 'RIGHT'
+cur = 0
+head = 0
+next = 0
+
+[[transition]]
+head = 'B'
+dir = 'NOMOVE'
+cur = 0
+next = 5
+
+# State 1
+[[transition]]
+dir = 'RIGHT'
+cur = 1
+head = 1
+next = 2
+
+[[transition]]
+dir = 'RIGHT'
+cur = 1
+head = 0
+next = 0
+
+[[transition]]
+head = 'B'
+dir = 'NOMOVE'
+cur = 1
+next = 5
+
+# State 2
+[[transition]]
+dir = 'LEFT'
+cur = 2
+head = 1
+next = 3
+
+[[transition]]
+dir = 'RIGHT'
+cur = 2
+head = 0
+next = 0
+
+[[transition]]
+head = 'B'
+dir = 'NOMOVE'
+cur = 2
+next = 5
+
+# State 3
+[[transition]]
+dir = 'RIGHT'
+write = '0'
+cur = 3
+next = 4
+
+# State 4
+[[transition]]
+dir = 'RIGHT'
+cur = 4
+next = 0
+
+# State 5
+[[transition]]
+cur = 5
+halt = true

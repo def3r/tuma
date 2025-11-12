@@ -1,0 +1,60 @@
+# Turing machine for binary increment
+[turingmachine]
+numofstates = 3
+initialstate = 0              # default is 0
+finalstates = [2]
+inputsymbols = ['0', '1']
+tapesymbols = ['0', '1', 'B']
+blanksymbol = 'B'             # default is B
+tape = '1011'
+
+# DIR
+# LEFT=-1, NOMOVE=0, RIGHT=1, SAME (as prev)
+
+# 0 based indexing
+
+# State 0
+[[transition]]
+dir = 'LEFT'
+cur = 0
+head = 'B'
+next = 1
+
+[[transition]]
+dir = 'RIGHT'
+cur = 0
+head = '1'
+next = 0
+
+[[transition]]
+dir = 'RIGHT'
+cur = 0
+head = '0'
+next = 0
+
+# State 1
+[[transition]]
+dir = 'LEFT'
+cur = 1
+head = '1'
+write = '0'
+next = 1
+
+[[transition]]
+dir = 'LEFT'
+cur = 1
+head = '0'
+write = '1'
+next = 2
+
+[[transition]]
+dir = 'LEFT'
+cur = 1
+head = 'B'
+write = '1'
+next = 2
+
+# State 2
+[[transition]]
+cur = 2
+halt = true
