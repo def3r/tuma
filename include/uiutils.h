@@ -2,7 +2,7 @@
 #define UIUTILS_H_
 
 #include "raylib.h"
-#include "types.h"
+#include "tuma.h"
 
 #define BGCOLOR (Color){23, 23, 23, 255}
 #define TABOUTLINE (Color){184, 187, 241, 255}

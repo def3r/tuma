@@ -1,7 +1,7 @@
 #ifndef TOML_H_
 #define TOML_H_
 
-#include "types.h"
+#include "tuma.h"
 #include <stdio.h>
 
 char *parseMacInfo(FILE *f, turingMachine **tm);

@@ -42,4 +42,18 @@
     }                                                                          \
   }
 
+// clang-format off
+typedef struct {
+  char   *arr;
+  size_t  len;
+  size_t  capacity;
+} charVector;
+
+typedef struct {
+  int    *arr;
+  size_t  len;
+  size_t  capacity;
+} intVector;
+// clang-format on
+
 #endif // !VECTORS_H_

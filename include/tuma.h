@@ -1,6 +1,8 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
+#include "vectors.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -8,19 +10,6 @@
 enum Dir { LEFT = -1, RIGHT = 1, NOMOVE = 0, SAME = 2 };
 
 // clang-format off
-
-typedef struct {
-  char   *arr;
-  size_t  len;
-  size_t  capacity;
-} charVector;
-
-typedef struct {
-  int    *arr;
-  size_t  len;
-  size_t  capacity;
-} intVector;
-
 typedef struct {
   uint16_t cur, next;
   char     head;
@@ -34,11 +23,6 @@ typedef struct {
   size_t      len;
   size_t      capacity;
 } transitionVector;
-typedef struct {
-  transitionVector *arr;
-  size_t            len;
-  size_t            capacity;
-} transitionVector2;
 
 typedef struct {
   uint32_t  steps;
