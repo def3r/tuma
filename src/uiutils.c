@@ -152,21 +152,10 @@ void DrawInfo(uiCtx *ctx, turingMachine *tm) {
   }
 }
 
-void initArrowOffsets(float arrowOffset[MAXSTATES][MAXSTATES][2],
-                      turingMachine *tm) {
-  for (int i = 0; i < tm->numStates; i++) {
-    for (int j = 0; j < tm->numStates; j++) {
-      arrowOffset[i][j][0] = 0;
-      arrowOffset[i][j][1] = 0;
-      arrowOffset[j][i][0] = 0;
-      arrowOffset[j][i][1] = 0;
-    }
-  }
-}
-
 void DrawTransitionGraph(uiCtx *ctx, turingMachine *tm) {
   float arrowOffset[MAXSTATES][MAXSTATES][2] = {0};
-  initArrowOffsets(arrowOffset, tm);
+  memset(arrowOffset, 0,
+         sizeof(arrowOffset[0][0][0]) * MAXSTATES * MAXSTATES * 2);
   int minOffset = 0;
   int offsetInc = 20;
 
@@ -251,8 +240,8 @@ void DrawTransitionGraph(uiCtx *ctx, turingMachine *tm) {
                      arrowOffset[t->cur][t->next][idx]);
     if (minOffset > mxOff) {
       mid.y += sign * minOffset;
-      arrowOffset[t->cur][t->next][idx] = minOffset + offsetInc / 2;
-      arrowOffset[t->next][t->cur][idx] = minOffset + offsetInc / 2;
+      arrowOffset[t->cur][t->next][idx] = minOffset + (int)(offsetInc / 2);
+      arrowOffset[t->next][t->cur][idx] = minOffset + (int)(offsetInc / 2);
     } else {
       mid.y += fmax(arrowOffset[t->next][t->cur][idx],
                     arrowOffset[t->cur][t->next][idx]);

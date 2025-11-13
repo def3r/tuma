@@ -91,23 +91,23 @@ int main() {
 
     // clang-format off
     BeginDrawing();
-    ClearBackground(BGCOLOR);
+      ClearBackground(BGCOLOR);
 
-    if (run)
-      DrawText("Runnin >>", 30, 30, 20, GREEN);
-    ui.x = 30, ui.y = 50;
+      if (run)
+        DrawText("Runnin >>", 30, 30, 20, GREEN);
+      ui.x = 30, ui.y = 50;
 
-    DrawTransitionGraph(&ui, tm);
-    DrawTape(&ui, tm);
-    DrawInfo(&ui, tm);
+      DrawTransitionGraph(&ui, tm);
+      DrawTape(&ui, tm);
+      DrawInfo(&ui, tm);
 
-    DrawRectangleLinesEx(ui.cur, 4, WHITE);
-
+      DrawRectangleLinesEx(ui.cur, 4, WHITE);
     EndDrawing();
     // clang-format on
 
     // Reload config
-    if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_R)) {
+    if (filePathCounter > 0 && IsKeyDown(KEY_LEFT_CONTROL) &&
+        IsKeyPressed(KEY_R)) {
       LoadTuma(filePaths[filePathCounter - 1], &ui, &tm);
 
       // Reset Tape
@@ -141,6 +141,13 @@ int main() {
     } else if (IsKeyPressed(KEY_T)) {
       // inputMode = true;
 
+      // Execute
+    } else if (filePathCounter > 0 && IsKeyPressed(KEY_E)) {
+      int headIndexInit = (tm->state.head - tm->tape);
+      execTuringMachine(tm);
+      int headIndex = (tm->state.head - tm->tape);
+      ui.offsetX += (headIndex - headIndexInit) * ui.charWidth;
+
       // Next Step
     } else if (filePathCounter > 0 && (IsKeyPressed(KEY_SPACE) || run)) {
       if (run && ui.dX != 0)
@@ -169,7 +176,8 @@ int main() {
 
   CloseWindow();
 
-  // execTuringMachine(tm);
+  if (filePathCounter > 0)
+    execTuringMachine(tm);
   if (tm->rawTapeLen > 0)
     printf("Output: %.*s\n", (int)tm->rawTapeLen, tm->rawTape);
 

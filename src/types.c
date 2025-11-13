@@ -87,12 +87,10 @@ void transition_func(turingMachine *tm) {
 }
 
 void execTuringMachine(turingMachine *tm) {
-  bool exit = false;
-  while (!exit && !tm->state.halt) {
+  while (!tm->state.halt) {
     printf("Current State: %d, head: %c, tape: %.*s\n", tm->state.curState,
            *tm->state.head, (int)tm->rawTapeLen, tm->rawTape);
     transition_func(tm);
-    VectorFind(tm->finalStates, tm->state.curState, exit);
   }
 }
 
