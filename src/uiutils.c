@@ -1,7 +1,9 @@
 #include "uiutils.h"
+#include "raylib.h"
 #include "raymath.h"
 #include "types.h"
 #include "utils.h"
+#include "vectors.h"
 
 #include <math.h>
 #include <stdint.h>
@@ -71,6 +73,7 @@ void DrawInfo(uiCtx *ctx, turingMachine *tm) {
   ctx->y += 1.5 * ctx->charHeight;
   ctx->x = 30;
   char buf[BUFSIZ];
+  Color c;
   sprintf(buf, "%d", tm->state.curState);
   DrawText("State", ctx->x, ctx->y, 26, GRAY);
   DrawText(buf, ctx->x + 180, ctx->y, 26, GRAY);
@@ -82,6 +85,18 @@ void DrawInfo(uiCtx *ctx, turingMachine *tm) {
   sprintf(buf, "%u", tm->state.steps);
   DrawText("Steps", ctx->x, ctx->y + 60, 26, GRAY);
   DrawText(buf, ctx->x + 180, ctx->y + 60, 26, GRAY);
+
+  sprintf(buf, "%s",
+          (tm->state.halt || tm->rawTapeLen == 0) ? "Halt" : "Running");
+  DrawText("Status", ctx->x, ctx->y + 90, 26, GRAY);
+  DrawText(buf, ctx->x + 180, ctx->y + 90, 26, GRAY);
+
+  bool isFinalState = false;
+  VectorFind(tm->finalStates, tm->state.curState, isFinalState);
+  sprintf(buf, "%s", (isFinalState) ? "True" : "False");
+  c = isFinalState ? GREEN : (Color){155, 55, 55, 255};
+  DrawText("Accept", ctx->x, ctx->y + 120, 26, GRAY);
+  DrawText(buf, ctx->x + 180, ctx->y + 120, 26, c);
 
   sprintf(buf, "Transitions for State %d", tm->state.curState);
   DrawText(buf, ctx->x + ctx->w / 2, ctx->y, 26, LIGHTGRAY);
