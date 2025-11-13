@@ -78,9 +78,12 @@ void transition_func(turingMachine *tm) {
       tm->state.dir = t->dir;
     }
     tm->state.curState = t->next;
+
+    tm->state.head += tm->state.dir;
+    tm->state.steps++;
+  } else {
+    tm->state.halt = true;
   }
-  tm->state.head += tm->state.dir;
-  tm->state.steps++;
 }
 
 void execTuringMachine(turingMachine *tm) {

@@ -1,0 +1,45 @@
+# turing machine of language not containing 111
+[turingmachine]
+numofstates = 4
+finalstates = [0, 1, 2]
+inputsymbols = ['0', '1']
+tape = '1011101'
+
+# State 0
+[[transition]]
+cur = 0
+head = '0'
+next = 0
+dir = 'RIGHT'
+
+[[transition]]
+cur = 0
+head = '1'
+next = 1
+dir = 'RIGHT'
+
+# State 1
+[[transition]]
+cur = 1
+head = '1'
+next = 2
+dir = 'RIGHT'
+
+[[transition]]
+cur = 1
+head = '0'
+next = 0
+dir = 'RIGHT'
+
+# State 2
+[[transition]]
+cur = 2
+head = '0'
+next = 0
+dir = 'RIGHT'
+
+[[transition]]
+cur = 2
+head = '1'
+next = 3
+dir = 'RIGHT'
