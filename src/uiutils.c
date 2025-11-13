@@ -27,8 +27,9 @@ void initUICtx(uiCtx *ctx, turingMachine *tm) {
       .height = ctx->charHeight + 2 * ctx->curPadding,
   };
 
-  ctx->initTape = malloc(strlen(tm->tape) + 1);
-  memcpy(ctx->initTape, tm->tape, strlen(tm->tape) + 1);
+  int len = (tm->tape == NULL) ? 0 : strlen(tm->tape);
+  ctx->initTape = malloc(len + 1);
+  memcpy(ctx->initTape, tm->tape, len + 1);
 
   ctx->offsetX = 0;
   ctx->dX = 0;

@@ -48,18 +48,24 @@ void debug(turingMachine *tm) {
   printf("Blank sym: %c\n", tm->blankSymbol);
   printf("init state: %d\n", tm->initState);
   printf("final states: ");
-  for (int i = 0; i < tm->finalStates->len; i++) {
-    printf("%d,", tm->finalStates->arr[i]);
+  if (tm->finalStates) {
+    for (int i = 0; i < tm->finalStates->len; i++) {
+      printf("%d,", tm->finalStates->arr[i]);
+    }
   }
 
   printf("\ninput symbols: ");
-  for (int i = 0; i < tm->inputSymbols->len; i++) {
-    printf("%c,", tm->inputSymbols->arr[i]);
+  if (tm->inputSymbols) {
+    for (int i = 0; i < tm->inputSymbols->len; i++) {
+      printf("%c,", tm->inputSymbols->arr[i]);
+    }
   }
 
   printf("\ntape symbols: ");
-  for (int i = 0; i < tm->tapeSymbols->len; i++) {
-    printf("%c,", tm->tapeSymbols->arr[i]);
+  if (tm->tapeSymbols) {
+    for (int i = 0; i < tm->tapeSymbols->len; i++) {
+      printf("%c,", tm->tapeSymbols->arr[i]);
+    }
   }
 
   printf("\ntransitions: ");

@@ -12,9 +12,11 @@
   } while (0)
 
 #define FreeVector(v)                                                          \
-  free(v->arr);                                                                \
-  free(v);                                                                     \
-  v = NULL
+  if (v != NULL) {                                                             \
+    free(v->arr);                                                              \
+    free(v);                                                                   \
+    v = NULL;                                                                  \
+  }
 
 #define VectorPush(v, c)                                                       \
   if (v != NULL) {                                                             \

@@ -11,13 +11,15 @@ turingMachine *makeTuringMachine() {
     return NULL;
   memset(tm, 0, sizeof(turingMachine));
   tm->blankSymbol = 'B';
-  tm->tape = "";
+  tm->tape = NULL;
   tm->rawTape = NULL;
   MakeVector(transitionVector, tm->transitions);
   return tm;
 }
 
 void freeTuringMachine(turingMachine *tm) {
+  if (tm == NULL)
+    return;
   tm->state.head = NULL;
   Free(tm->tape);
   FreeVector(tm->inputSymbols);
@@ -32,11 +34,15 @@ void padTuringMachineTape(turingMachine *tm) {
     return;
   // lets keep padding 10 (both sides) by deafult
   tm->rawTape = tm->tape;
-  tm->tape = malloc(21 + strlen(tm->tape));
-  sprintf(tm->tape, "BBBBBBBBBB%sBBBBBBBBBB", tm->rawTape);
+  int len = (tm->tape == NULL) ? 0 : strlen(tm->tape);
+  tm->tape = malloc(21 + len);
+  sprintf(tm->tape, "BBBBBBBBBB%sBBBBBBBBBB",
+          (tm->rawTape == NULL) ? "" : tm->rawTape);
 
-  tm->rawTapeLen = strlen(tm->rawTape);
-  Free(tm->rawTape);
+  tm->rawTapeLen = len;
+  if (tm->rawTape) {
+    Free(tm->rawTape);
+  }
   tm->rawTape = tm->tape + 10;
 }
 

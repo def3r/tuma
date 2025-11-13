@@ -11,15 +11,31 @@
 #include <string.h>
 
 #define DEBUG
+#define MAX_FILEPATH_RECORDED 4096
+#define MAX_FILEPATH_SIZE 2048
+
+void LoadTuma(char *filePath, uiCtx *ui, turingMachine **tm) {
+  if (strlen(filePath) == 0) {
+    *tm = makeTuringMachine();
+    padTuringMachineTape(*tm);
+    initTuringMachineState(*tm);
+    initUICtx(ui, *tm);
+    return;
+  }
+
+  void *ptr = *tm;
+  parseTOML(filePath, tm);
+  if (*tm == ptr)
+    return;
+  padTuringMachineTape(*tm);
+  initTuringMachineState(*tm);
+  initUICtx(ui, *tm);
+}
 
 int main() {
   turingMachine *tm = NULL;
-  parseTOML("tmadd.toml", &tm);
-  padTuringMachineTape(tm);
-  initTuringMachineState(tm);
-
   uiCtx ui = {0};
-  initUICtx(&ui, tm);
+  LoadTuma("", &ui, &tm);
 
   printf("\n");
 #ifdef DEBUG
@@ -29,12 +45,38 @@ int main() {
   InitWindow(ui.w, ui.h, "tuma");
   SetTargetFPS(60);
 
+  int filePathCounter = 0;
+  char *filePaths[MAX_FILEPATH_RECORDED] = {0};
+  for (int i = 0; i < MAX_FILEPATH_RECORDED; i++) {
+    filePaths[i] = (char *)RL_CALLOC(MAX_FILEPATH_SIZE, 1);
+  }
+
   bool inputMode = false;
   char tapeBuffer[256] = {0};
   int tapeLen = 0;
   bool run = false;
   int noop = 30;
+
   while (!WindowShouldClose()) {
+    if (IsFileDropped()) {
+      FilePathList droppedFiles = LoadDroppedFiles();
+
+      for (int i = 0, offset = filePathCounter; i < (int)droppedFiles.count;
+           i++) {
+        if (filePathCounter < (MAX_FILEPATH_RECORDED - 1)) {
+          TextCopy(filePaths[offset + i], droppedFiles.paths[i]);
+          filePathCounter++;
+        }
+      }
+      UnloadDroppedFiles(droppedFiles);
+
+      printf("Last File: %s\n", filePaths[filePathCounter - 1]);
+      LoadTuma(filePaths[filePathCounter - 1], &ui, &tm);
+      tapeLen = 0;
+      run = false;
+      noop = 30;
+    }
+
     if (ui.dX > 0) {
       ui.offsetX += 5;
       ui.dX -= 5;
@@ -61,40 +103,15 @@ int main() {
 
     DrawRectangleLinesEx(ui.cur, 4, WHITE);
 
-    // if (inputMode) {
-    //   DrawText("Enter new tape:", 100, 100, 24, WHITE);
-    //   DrawRectangle(100, 140, 400, 40, GRAY);
-    //   DrawText(tapeBuffer, 110, 150, 24, BLACK);
-    //
-    //   int key = GetCharPressed();
-    //     if (IsKeyPressed(KEY_BACKSPACE) && tapeLen > 0) {
-    //       tapeBuffer[--tapeLen] = '\0';
-    //     } else if (key >= 32 && key <= 126 &&
-    //                tapeLen < sizeof(tapeBuffer) - 1) {
-    //       tapeBuffer[tapeLen++] = (char)key;
-    //       tapeBuffer[tapeLen] = '\0';
-    //     }
-    //     key = GetCharPressed();
-    //   }
-    //
-    //   if (IsKeyPressed(KEY_ENTER)) {
-    //     free(tm->tape);
-    //     tm->rawTape = NULL;
-    //     tm->tape = calloc(tapeLen + 1, 1);
-    //     memcpy(tm->tape, tapeBuffer, tapeLen);
-    //     padTuringMachineTape(tm);
-    //     initTuringMachineState(tm);
-    //     inputMode = false;
-    //   }
-    //
-    //   if (IsKeyPressed(KEY_ESCAPE)) {
-    //     inputMode = false;
-    //   }
     EndDrawing();
     // clang-format on
 
-    // Reset Tape
-    if (IsKeyPressed(KEY_R)) {
+    // Reload config
+    if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_R)) {
+      LoadTuma(filePaths[filePathCounter - 1], &ui, &tm);
+
+      // Reset Tape
+    } else if (IsKeyPressed(KEY_R)) {
       memcpy(tm->tape, ui.initTape, strlen(ui.initTape));
       initTuringMachineState(tm);
       ui.offsetX = 0;
@@ -103,7 +120,8 @@ int main() {
       noop = 30;
 
       // Run
-    } else if (IsKeyPressed(KEY_ENTER) && run == false && inputMode == false) {
+    } else if (filePathCounter > 0 && IsKeyPressed(KEY_ENTER) && run == false &&
+               inputMode == false) {
       run = true;
       noop = 30;
 
@@ -121,10 +139,10 @@ int main() {
 
       // New Tape
     } else if (IsKeyPressed(KEY_T)) {
-      inputMode = true;
+      // inputMode = true;
 
       // Next Step
-    } else if (IsKeyPressed(KEY_SPACE) || run) {
+    } else if (filePathCounter > 0 && (IsKeyPressed(KEY_SPACE) || run)) {
       if (run && ui.dX != 0)
         continue;
       if (run && noop != 0)
@@ -145,10 +163,15 @@ int main() {
     }
   }
 
+  for (int i = 0; i < MAX_FILEPATH_RECORDED; i++) {
+    RL_FREE(filePaths[i]);
+  }
+
   CloseWindow();
 
   // execTuringMachine(tm);
-  printf("Output: %.*s\n", (int)tm->rawTapeLen, tm->rawTape);
+  if (tm->rawTapeLen > 0)
+    printf("Output: %.*s\n", (int)tm->rawTapeLen, tm->rawTape);
 
   free(ui.initTape);
 
