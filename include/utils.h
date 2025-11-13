@@ -5,6 +5,8 @@
 
 #include <stdbool.h>
 
+#define MAXSTATES 20
+
 #define Free(v)                                                                \
   free(v);                                                                     \
   v = NULL

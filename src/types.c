@@ -12,6 +12,7 @@ turingMachine *makeTuringMachine() {
   memset(tm, 0, sizeof(turingMachine));
   tm->blankSymbol = 'B';
   tm->tape = "";
+  tm->rawTape = NULL;
   MakeVector(transitionVector, tm->transitions);
   return tm;
 }

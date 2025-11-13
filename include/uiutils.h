@@ -35,5 +35,6 @@ void initUICtx(uiCtx *ctx, turingMachine *tm);
 void DrawTape(uiCtx *ctx, turingMachine *tm);
 
 void DrawInfo(uiCtx *ctx, turingMachine *tm);
+void DrawTransitionGraph(uiCtx *ctx, turingMachine *tm);
 
 #endif

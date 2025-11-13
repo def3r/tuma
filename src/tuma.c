@@ -14,7 +14,7 @@
 
 int main() {
   turingMachine *tm = NULL;
-  parseTOML("tmbinc.toml", &tm);
+  parseTOML("tmadd.toml", &tm);
   padTuringMachineTape(tm);
   initTuringMachineState(tm);
 
@@ -29,6 +29,9 @@ int main() {
   InitWindow(ui.w, ui.h, "tuma");
   SetTargetFPS(60);
 
+  bool inputMode = false;
+  char tapeBuffer[256] = {0};
+  int tapeLen = 0;
   bool run = false;
   int noop = 30;
   while (!WindowShouldClose()) {
@@ -46,15 +49,47 @@ int main() {
 
     // clang-format off
     BeginDrawing();
-      ClearBackground(BGCOLOR);
+    ClearBackground(BGCOLOR);
 
-      if (run)
-        DrawText("Runnin >>", 30, 30, 20, GREEN);
+    if (run)
+      DrawText("Runnin >>", 30, 30, 20, GREEN);
+    ui.x = 30, ui.y = 50;
 
-      DrawTape(&ui, tm);
-      DrawInfo(&ui, tm);
+    DrawTransitionGraph(&ui, tm);
+    DrawTape(&ui, tm);
+    DrawInfo(&ui, tm);
 
-      DrawRectangleLinesEx(ui.cur, 4, WHITE);
+    DrawRectangleLinesEx(ui.cur, 4, WHITE);
+
+    // if (inputMode) {
+    //   DrawText("Enter new tape:", 100, 100, 24, WHITE);
+    //   DrawRectangle(100, 140, 400, 40, GRAY);
+    //   DrawText(tapeBuffer, 110, 150, 24, BLACK);
+    //
+    //   int key = GetCharPressed();
+    //     if (IsKeyPressed(KEY_BACKSPACE) && tapeLen > 0) {
+    //       tapeBuffer[--tapeLen] = '\0';
+    //     } else if (key >= 32 && key <= 126 &&
+    //                tapeLen < sizeof(tapeBuffer) - 1) {
+    //       tapeBuffer[tapeLen++] = (char)key;
+    //       tapeBuffer[tapeLen] = '\0';
+    //     }
+    //     key = GetCharPressed();
+    //   }
+    //
+    //   if (IsKeyPressed(KEY_ENTER)) {
+    //     free(tm->tape);
+    //     tm->rawTape = NULL;
+    //     tm->tape = calloc(tapeLen + 1, 1);
+    //     memcpy(tm->tape, tapeBuffer, tapeLen);
+    //     padTuringMachineTape(tm);
+    //     initTuringMachineState(tm);
+    //     inputMode = false;
+    //   }
+    //
+    //   if (IsKeyPressed(KEY_ESCAPE)) {
+    //     inputMode = false;
+    //   }
     EndDrawing();
     // clang-format on
 
@@ -68,7 +103,7 @@ int main() {
       noop = 30;
 
       // Run
-    } else if (IsKeyPressed(KEY_ENTER) && run == false) {
+    } else if (IsKeyPressed(KEY_ENTER) && run == false && inputMode == false) {
       run = true;
       noop = 30;
 
@@ -83,6 +118,10 @@ int main() {
 
       // Load New File
     } else if (IsKeyPressed(KEY_O)) {
+
+      // New Tape
+    } else if (IsKeyPressed(KEY_T)) {
+      inputMode = true;
 
       // Next Step
     } else if (IsKeyPressed(KEY_SPACE) || run) {
