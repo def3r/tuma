@@ -17,16 +17,13 @@
 void LoadTuma(char *filePath, uiCtx *ui, turingMachine **tm) {
   if (strlen(filePath) == 0) {
     *tm = makeTuringMachine();
-    padTuringMachineTape(*tm);
-    initTuringMachineState(*tm);
-    initUICtx(ui, *tm);
-    return;
+  } else {
+    void *ptr = *tm;
+    parseTOML(filePath, tm);
+    if (*tm == ptr)
+      return;
   }
 
-  void *ptr = *tm;
-  parseTOML(filePath, tm);
-  if (*tm == ptr)
-    return;
   padTuringMachineTape(*tm);
   initTuringMachineState(*tm);
   initUICtx(ui, *tm);
@@ -51,9 +48,6 @@ int main() {
     filePaths[i] = (char *)RL_CALLOC(MAX_FILEPATH_SIZE, 1);
   }
 
-  bool inputMode = false;
-  char tapeBuffer[256] = {0};
-  int tapeLen = 0;
   bool run = false;
   int noop = 30;
 
@@ -72,7 +66,6 @@ int main() {
 
       printf("Last File: %s\n", filePaths[filePathCounter - 1]);
       LoadTuma(filePaths[filePathCounter - 1], &ui, &tm);
-      tapeLen = 0;
       run = false;
       noop = 30;
     }
@@ -120,8 +113,7 @@ int main() {
       noop = 30;
 
       // Run
-    } else if (filePathCounter > 0 && IsKeyPressed(KEY_ENTER) && run == false &&
-               inputMode == false) {
+    } else if (filePathCounter > 0 && IsKeyPressed(KEY_ENTER) && run == false) {
       run = true;
       noop = 30;
 
@@ -133,13 +125,6 @@ int main() {
       // Quit
     } else if (IsKeyPressed(KEY_Q)) {
       break;
-
-      // Load New File
-    } else if (IsKeyPressed(KEY_O)) {
-
-      // New Tape
-    } else if (IsKeyPressed(KEY_T)) {
-      // inputMode = true;
 
       // Execute
     } else if (filePathCounter > 0 && IsKeyPressed(KEY_E)) {
