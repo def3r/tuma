@@ -1,0 +1,36 @@
+# turing machine of language not containing 1
+# States start from index 0
+[turingmachine]
+numofstates = 2
+initialstate = 0              # optional; default is 0
+finalstates = [0]
+inputsymbols = ['0', '1']
+tapesymbols = ['0', '1', 'B']
+blanksymbol = 'B'             # optional; default is B
+tape = '000100'               # optional; default is empty string
+
+# Directions for transition
+# LEFT=-1, NOMOVE=0, RIGHT=1, SAME (as prev)
+
+# State 0
+[[transition]] # optional; no transition for any state halts machine
+cur = 0 # current state 0
+
+# optional; read val at head
+# if not provided its considered a mandatory move
+head = '0'
+
+write = ''    # optional; default is NULL char
+dir = 'RIGHT'
+next = 0      # next state
+
+[[transition]]
+cur = 0
+head = '1'
+dir = 'RIGHT'
+next = 1
+
+# Optional for dead state to have transition
+[[transition]]
+cur = 1
+halt = true # optional;
