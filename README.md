@@ -1,6 +1,8 @@
 # Turing Machine Simulator
 *`tuma`* is a Turing Machine Simulator with a single tape and a single R/W head written in C using Raylib.
 
+> *`tuma`* supports both language acceptors as well as transducers
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/a8ea5e20-a94f-402d-94d2-f0d4eb5f61c8" alt="tuma demo"/>
   <br/>
@@ -12,6 +14,10 @@ The primamry build method is `Makefile` which is only *linux compatible*.
 However, [Raylib](https://github.com/raysan5/raylib) is corss-platform and one can
 [build raylib](https://github.com/raysan5/raylib?tab=readme-ov-file#build-and-installation) and link
 this project on any other platform.
+
+*OR*
+
+For a single file implementation (no gui and no build system) check [`def3r/SIGSEGV`](https://github.com/def3r/SIGSEGV/blob/main/CDump/turingmachinegeneric.c)
 
 ## Input file
 The information of the turing machine is stored in a `.toml` file and is to be *drag n drop*ped to be loaded.
@@ -73,3 +79,7 @@ halt = true # optional;
 
 ## Examples
 The [`examples/`](https://github.com/def3r/tuma/tree/main/examples) directory contains some turing machine `toml` files.
+
+---
+
+*Toml parsing + turing machine, without and gui can be found here:* [`def3r/SIGSEGV`](https://github.com/def3r/SIGSEGV/blob/main/CDump/turingmachinegeneric.c)
